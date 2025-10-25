@@ -5,7 +5,6 @@ class Pessoa:
                  complemento: str, logradouro: str, email: str, tipo_pessoa: str, data_cadastro: str,
                  status_conta: str, cargo: str, data_admissao: str, salario: float, codigo_departamento: int,
                  cod_biblioteca: int, data_nascimento: str, biografia: str):
-        
         self.codigo_pessoa = codigo_pessoa
         self.nome = nome
         self.sobrenome = sobrenome
