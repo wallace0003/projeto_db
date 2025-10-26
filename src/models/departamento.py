@@ -1,10 +1,8 @@
 class Departamento:
-    def __init__(self, codigo_departamento: int, nome: str, descricao: str, responsavel: str,
-                 codigo_funcionario: int, codigo_pessoa: int):
-        
-        self.codigo_departamento = codigo_departamento
-        self.nome = nome
+    def __init__(self, id_departamento: int, nome_departamento: str, descricao: str, responsavel: str):
+        self.id_departamento = id_departamento
+        self.nome_departamento = nome_departamento
         self.descricao = descricao
         self.responsavel = responsavel
-        self.codigo_funcionario = codigo_funcionario
-        self.codigo_pessoa = codigo_pessoa
+        
+        

@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from supabase import create_client, Client
 from src.script.make_data import make_people
+from src.models.departamento import Departamento
 
 load_dotenv()
 
@@ -10,7 +11,7 @@ key = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
 
 
-def add_people(n_rows):
+def add_people(n_rows:int) -> None:
     pessoas = make_people(n_rows)
 
     for p in pessoas:
@@ -40,7 +41,31 @@ def add_people(n_rows):
 
     print("🎉 Inserção concluída com sucesso!")
 
+def create_departament() -> None:
+    departamentos = [
+        Departamento(1, "Administração", "Gerencia geral e coordenação das atividades da biblioteca.", "Guilherme da Paz"),
+        Departamento(2, "Aquisição", "Responsável pela seleção e compra de novos livros e materiais.", "Bruna da Mota"),
+        Departamento(3, "Catalogação", "Cuida da organização, registro e indexação das obras.", "Sara Silveira"),
+        Departamento(4, "Atendimento", "Auxilia leitores e gerencia empréstimos e devoluções.", "Antônio das Neves"),
+        Departamento(5, "Tecnologia da Informação", "Mantém os sistemas e infraestrutura tecnológica da biblioteca.", "Sr. Samuel Correia")
+    ]
 
+    try:
+        data = [{
+            "id_departamento": d.id_departamento,
+            "nome_departamento": d.nome_departamento,
+            "descricao": d.descricao,
+            "responsavel": d.responsavel
+        } for d in departamentos]
+
+        response = supabase.table("departamentos").insert(data).execute()
+        print("✅ Departamentos criados com sucesso!")
+        print(response)
+    except Exception as e:
+        print("❌ Erro ao criar departamentos:", e)
+
+def create_biblioteca() -> None:
+    ...
 
 if __name__ == "__main__":
-    add_people(100)
+    create_departament()

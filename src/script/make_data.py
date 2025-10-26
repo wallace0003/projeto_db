@@ -107,6 +107,7 @@ def make_people(n_peoples: int) -> list:
         if tipo == "FUNCIONARIO":
             cargo = choice(cargos_biblioteca)
             salario = randint(2000, 10000)
+            departamento_id = randint(1,5)
         elif tipo == "AUTOR":
             biografia = choice(biografias)
 
