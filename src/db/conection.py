@@ -10,8 +10,8 @@ key = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
 
 
-def add_people():
-    pessoas = make_people(3)
+def add_people(n_rows):
+    pessoas = make_people(n_rows)
 
     for p in pessoas:
         response = (
@@ -27,16 +27,15 @@ def add_people():
                 "cargo": p.cargo,
                 "data_admissao": p.data_admissao,
                 "salario": p.salario,
-                "departamento_id": p.id_departamento if hasattr(p, "id_departamento") else None,
-                "biblioteca_id": p.id_biblioteca if hasattr(p, "id_biblioteca") else None,
+                "departamento_id": p.departamento_id,
+                "biblioteca_id": p.departamento_id,
                 "data_nascimento": p.data_nascimento,
                 "biografia": p.biografia,
-                "nacionalidade": p.nacionalidade if hasattr(p, "nacionalidade") else None,
+                "nacionalidade": p.nacionalidade,
                 "endereco": p.endereco,
             })
             .execute()
         )
-        
         print(f"✅ Pessoa {p.nome} inserida com sucesso!")
 
     print("🎉 Inserção concluída com sucesso!")
@@ -44,4 +43,4 @@ def add_people():
 
 
 if __name__ == "__main__":
-    add_people()
+    add_people(100)

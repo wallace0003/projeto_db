@@ -94,7 +94,7 @@ def make_people(n_peoples: int) -> list:
         data_admissao = fake.date_between(start_date, end_date)
         status = choice(status_conta)
         data_nascimento = fake.date_of_birth(minimum_age=18, maximum_age=65)
-        nacionalidade = "Brasileiro"
+        nacionalidade = choice(["Brasileiro", "Venezuelano", "Canadense","Americano","Argentino"])
         endereco = f"{rua}, {numero} - {bairro}, {cidade}/{estado}, CEP {cep}"
 
         # Campos opcionais
@@ -104,12 +104,10 @@ def make_people(n_peoples: int) -> list:
         departamento_id = None
         biblioteca_id = None
 
-        if tipo == "funcionario":
+        if tipo == "FUNCIONARIO":
             cargo = choice(cargos_biblioteca)
             salario = randint(2000, 10000)
-            departamento_id = randint(1, 5)
-            biblioteca_id = randint(1,10)
-        elif tipo == "autor":
+        elif tipo == "AUTOR":
             biografia = choice(biografias)
 
         pessoa = Pessoa(

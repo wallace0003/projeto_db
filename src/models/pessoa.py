@@ -27,5 +27,5 @@ class Pessoa:
         self.biblioteca_id = biblioteca_id
         self.data_nascimento = data_nascimento
         self.biografia = biografia
-        self.nacionalide = nacionalidade
+        self.nacionalidade = nacionalidade
         self.endereco = endereco
