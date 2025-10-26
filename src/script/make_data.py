@@ -1,9 +1,7 @@
-
 from faker import Faker
 from datetime import datetime
 from random import randint, choice
 from ..models.pessoa import Pessoa
-
 
 #Instanciando a classe faker
 fake = Faker("pt-br")
