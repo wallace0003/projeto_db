@@ -3,8 +3,9 @@ class Pessoa:
     def __init__(self, codigo_pessoa: int, nome: str, sobrenome: str, cpf: str,
                  cep: str, estado: str, cidade: str, bairro: str, rua: str, numero: int,
                  complemento: str, logradouro: str, email: str, tipo_pessoa: str, data_cadastro: str,
-                 status_conta: str, cargo: str, data_admissao: str, salario: float, codigo_departamento: int,
-                 cod_biblioteca: int, data_nascimento: str, biografia: str):
+                 status_conta: str, cargo: str | None, data_admissao: str, salario: float | None, 
+                 codigo_departamento: int | None, cod_biblioteca: int | None, data_nascimento: str, 
+                 biografia: str | None, codigo_emprestimo:int | None, codigo_reserva:int | None):
         self.codigo_pessoa = codigo_pessoa
         self.nome = nome
         self.sobrenome = sobrenome
@@ -28,3 +29,5 @@ class Pessoa:
         self.cod_biblioteca = cod_biblioteca
         self.data_nascimento = data_nascimento
         self.biografia = biografia
+        self.codigo_emprestimo = codigo_emprestimo
+        self.codigo_reserva = codigo_reserva
