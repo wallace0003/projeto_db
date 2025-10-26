@@ -59,8 +59,8 @@ estados_cidades = {
     "DF": ["Brasília"]
 }
 
-tipos_pessoas = ["usuario", "funcionario", "autor"]
-status_conta = ["ativo", "desativo", "pendente"]
+tipos_pessoas = ["USUARIO", "FUNCIONARIO", "AUTOR"]
+status_conta = ["ATIVO", "INATIVO", "SUSPENSO"]
 cargos_biblioteca = ["Bibliotecário","Assistente de Biblioteca", "Auxiliar de Biblioteca",
                      "Atendente de Biblioteca", "Gerente de Biblioteca"]
 
@@ -84,43 +84,37 @@ def make_people(n_peoples: int) -> list:
         cidade = choice(estados_cidades[estado])
         bairro = choice(bairros)
         rua = choice(ruas)
-        complemento = choice(complementos)
         cep = choice(ceps)
         numero = randint(1, 1000)
-        nome_completo = fake.name()
-        nome, *sobrenome = nome_completo.split(" ", 1)
-        sobrenome = sobrenome[0] if sobrenome else ""
+        nome = fake.name()
         cpf = fake.cpf()
-        cpf = str(cpf)
         email = fake.email()
         tipo = choice(tipos_pessoas)
         data_cadastro = fake.date_between(start_date, end_date)
         data_admissao = fake.date_between(start_date, end_date)
         status = choice(status_conta)
         data_nascimento = fake.date_of_birth(minimum_age=18, maximum_age=65)
-        logradouro = f"{rua}, {numero} - {bairro}"
-        
-        # campos específicos por tipo de pessoa
+        nacionalidade = "Brasileiro"
+        endereco = f"{rua}, {numero} - {bairro}, {cidade}/{estado}, CEP {cep}"
+
+        # Campos opcionais
         cargo = None
         salario = None
         biografia = None
-        codigo_departamento = None
-        cod_biblioteca = randint(1, 10)
-        codigo_emprestimo = None
-        codigo_reserva = None
+        departamento_id = None
+        biblioteca_id = None
 
         if tipo == "funcionario":
             cargo = choice(cargos_biblioteca)
-            salario = randint(2000, 8000)
-            codigo_departamento = randint(1, 5)
-
+            salario = randint(2000, 10000)
+            departamento_id = randint(1, 5)
+            biblioteca_id = randint(1,10)
         elif tipo == "autor":
             biografia = choice(biografias)
 
         pessoa = Pessoa(
-            codigo_pessoa=i,
+            id_pessoa=i,
             nome=nome,
-            sobrenome=sobrenome,
             cpf=cpf,
             cep=cep,
             estado=estado,
@@ -128,8 +122,6 @@ def make_people(n_peoples: int) -> list:
             bairro=bairro,
             rua=rua,
             numero=numero,
-            complemento=complemento,
-            logradouro=logradouro,
             email=email,
             tipo_pessoa=tipo,
             data_cadastro=str(data_cadastro),
@@ -137,21 +129,18 @@ def make_people(n_peoples: int) -> list:
             cargo=cargo,
             data_admissao=str(data_admissao),
             salario=salario,
-            codigo_departamento=codigo_departamento,
-            cod_biblioteca=cod_biblioteca,
+            departamento_id=departamento_id,
+            biblioteca_id=biblioteca_id,
             data_nascimento=str(data_nascimento),
             biografia=biografia,
-            codigo_emprestimo=codigo_emprestimo,
-            codigo_reserva=codigo_reserva
+            nacionalidade=nacionalidade,
+            endereco=endereco
         )
 
         pessoas.append(pessoa)
     return pessoas
-        
 
 if __name__ == "__main__":
     pessoas = make_people(5)
-    print(len(pessoas))
-    print(pessoas[0].cpf)
     print("ok")
     

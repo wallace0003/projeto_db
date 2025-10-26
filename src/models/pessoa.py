@@ -1,14 +1,14 @@
 
 class Pessoa:
-    def __init__(self, codigo_pessoa: int, nome: str, sobrenome: str, cpf: str,
+    def __init__(self, id_pessoa: int, nome:str, cpf: str,
                  cep: str, estado: str, cidade: str, bairro: str, rua: str, numero: int,
-                 complemento: str, logradouro: str, email: str, tipo_pessoa: str, data_cadastro: str,
+                 email: str, tipo_pessoa: str, data_cadastro: str,
                  status_conta: str, cargo: str | None, data_admissao: str, salario: float | None, 
-                 codigo_departamento: int | None, cod_biblioteca: int | None, data_nascimento: str, 
-                 biografia: str | None, codigo_emprestimo:int | None, codigo_reserva:int | None):
-        self.codigo_pessoa = codigo_pessoa
+                 departamento_id: int | None, biblioteca_id: int | None, data_nascimento: str, 
+                 biografia: str | None,
+                 nacionalidade:str, endereco:str):
+        self.id_pessoa = id_pessoa
         self.nome = nome
-        self.sobrenome = sobrenome
         self.cpf = cpf
         self.cep = cep
         self.estado = estado
@@ -16,8 +16,6 @@ class Pessoa:
         self.bairro = bairro
         self.rua = rua
         self.numero = numero
-        self.complemento = complemento
-        self.logradouro = logradouro
         self.email = email
         self.tipo_pessoa = tipo_pessoa
         self.data_cadastro = data_cadastro
@@ -25,9 +23,9 @@ class Pessoa:
         self.cargo = cargo
         self.data_admissao = data_admissao
         self.salario = salario
-        self.codigo_departamento = codigo_departamento
-        self.cod_biblioteca = cod_biblioteca
+        self.departamento_id = departamento_id
+        self.biblioteca_id = biblioteca_id
         self.data_nascimento = data_nascimento
         self.biografia = biografia
-        self.codigo_emprestimo = codigo_emprestimo
-        self.codigo_reserva = codigo_reserva
+        self.nacionalide = nacionalidade
+        self.endereco = endereco
