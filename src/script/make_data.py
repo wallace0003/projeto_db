@@ -2,6 +2,7 @@ from faker import Faker
 from datetime import datetime
 from random import randint, choice
 from ..models.pessoa import Pessoa
+from src.models.biblioteca import Biblioteca
 
 #Instanciando a classe faker
 fake = Faker("pt-br")
@@ -139,7 +140,40 @@ def make_people(n_peoples: int) -> list:
         pessoas.append(pessoa)
     return pessoas
 
+def make_library() -> list:
+    bibliotecas = [
+        "Biblioteca Central de São Paulo",
+        "Biblioteca Monteiro Lobato",
+        "Biblioteca do Saber",
+        "Biblioteca Paulo Freire",
+        "Biblioteca Luz do Conhecimento",
+        "Biblioteca Machado de Assis",
+        "Biblioteca Tecnológica da FEI",
+        "Biblioteca Cultural do Brasil",
+        "Biblioteca José de Alencar",
+        "Biblioteca Digital Horizonte"
+    ]
+
+    lista_bibliotecas = []
+
+    for l in bibliotecas:
+        id_biblioteca = bibliotecas.index(l) + 1
+        email = fake.email()
+        telefone = fake.phone_number()
+        endereco = fake.address()
+        nome = l
+        biblioteca = Biblioteca(id_biblioteca=id_biblioteca, nome=nome, telefone=telefone,
+                                endereco=endereco, email=email)
+        lista_bibliotecas.append(biblioteca)
+        id_biblioteca = id_biblioteca +1
+    
+    return lista_bibliotecas
+        
+
 if __name__ == "__main__":
     pessoas = make_people(5)
     print("ok")
+    bibliotecas = make_library()
+    print(bibliotecas[0].nome)
+    print(bibliotecas[-1].nome)
     
