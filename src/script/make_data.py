@@ -1,7 +1,10 @@
 from faker import Faker
 from datetime import datetime
 from random import randint, choice
-from ..models.pessoa import Pessoa
+from src.models.pessoa import Pessoa
+from src.models.biblioteca import Biblioteca
+from src.models.editora import Editora
+from src.models.livro import Livro
 
 #Instanciando a classe faker
 fake = Faker("pt-br")
@@ -139,7 +142,96 @@ def make_people(n_peoples: int) -> list:
         pessoas.append(pessoa)
     return pessoas
 
+def make_library() -> list:
+    bibliotecas = [
+        "Biblioteca Central de São Paulo",
+        "Biblioteca Monteiro Lobato",
+        "Biblioteca do Saber",
+        "Biblioteca Paulo Freire",
+        "Biblioteca Luz do Conhecimento",
+        "Biblioteca Machado de Assis",
+        "Biblioteca Tecnológica da FEI",
+        "Biblioteca Cultural do Brasil",
+        "Biblioteca José de Alencar",
+        "Biblioteca Digital Horizonte"
+    ]
+
+    lista_bibliotecas = []
+
+    for l in bibliotecas:
+        id_biblioteca = bibliotecas.index(l) + 1
+        email = fake.email()
+        telefone = fake.phone_number()
+        endereco = fake.address()
+        nome = l
+        biblioteca = Biblioteca(id_biblioteca=id_biblioteca, nome=nome, telefone=telefone,
+                                endereco=endereco, email=email)
+        lista_bibliotecas.append(biblioteca)
+        id_biblioteca = id_biblioteca +1
+    
+    return lista_bibliotecas
+
+def make_publisher() -> None:
+    editoras = [
+    "Editora Companhia das Letras",
+    "Editora Record",
+    "Editora Rocco",
+    "Editora Intrínseca",
+    "Editora Saraiva",
+    "Editora Objetiva",
+    "Editora Globo Livros",
+    "Editora Moderna",
+    "Editora Atlas",
+    "Editora Sextante"
+    ]   
+
+    lista_editora = []
+    for e in editoras:
+        nome = e
+        cnpj = fake.cnpj()
+        endereco = fake.address()
+        telefone = fake.phone_number()
+        email = fake.email()
+        editora = Editora(nome=nome,cnpj=cnpj, endereco=endereco, telefone=telefone, email=email)
+        lista_editora.append(editora)
+
+    return lista_editora
+
+def make_books() -> None:
+    books = [
+        "As Sombras de Aurora",
+        "O Último Guardião do Tempo",
+        "Entre Estrelas e Tempestades",
+        "A Casa das Vozes Perdidas",
+        "O Jardim dos Relógios Quebrados",
+        "Memórias de Um Mundo Submerso",
+        "A Canção dos Ventos Antigos",
+        "O Herdeiro das Cinzas",
+        "Ecos de Um Futuro Esquecido",
+        "O Segredo do Farol Silencioso"
+    ]
+
+    lista_livros = []
+
+    for b in books:
+        editora_id = randint(1,10)
+        titulo = b
+        biblioteca_id = randint(1,10)
+        ano_publicacao = str(fake.date_between(start_date, end_date))
+        isbn = randint(1111111111111,9999999999999)
+        autor = fake.name()
+        livro = Livro(editora_id=editora_id, titulo=titulo, biblioteca_id=biblioteca_id,
+                      ano_pubicacao=ano_publicacao, isbn=isbn, autor=autor)
+        lista_livros.append(livro)
+    
+    return lista_livros
+
+
+
 if __name__ == "__main__":
     pessoas = make_people(5)
     print("ok")
+    bibliotecas = make_books()
+    print(bibliotecas[0].titulo)
+    print(bibliotecas[-1].titulo)
     

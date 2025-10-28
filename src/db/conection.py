@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from supabase import create_client, Client
-from src.script.make_data import make_people
+from src.script.make_data import make_people, make_library, make_publisher, make_books
 from src.models.departamento import Departamento
 
 load_dotenv()
@@ -39,15 +39,20 @@ def add_people(n_rows:int) -> None:
         )
         print(f"✅ Pessoa {p.nome} inserida com sucesso!")
 
-    print("🎉 Inserção concluída com sucesso!")
+    print("✅ Inserção concluída com sucesso!")
 
 def create_departament() -> None:
     departamentos = [
-        Departamento(1, "Administração", "Gerencia geral e coordenação das atividades da biblioteca.", "Guilherme da Paz"),
-        Departamento(2, "Aquisição", "Responsável pela seleção e compra de novos livros e materiais.", "Bruna da Mota"),
-        Departamento(3, "Catalogação", "Cuida da organização, registro e indexação das obras.", "Sara Silveira"),
-        Departamento(4, "Atendimento", "Auxilia leitores e gerencia empréstimos e devoluções.", "Antônio das Neves"),
-        Departamento(5, "Tecnologia da Informação", "Mantém os sistemas e infraestrutura tecnológica da biblioteca.", "Sr. Samuel Correia")
+        Departamento(1, "Administração", 
+                     "Gerencia geral e coordenação das atividades da biblioteca.", "Guilherme da Paz"),
+        Departamento(2, "Aquisição", 
+                     "Responsável pela seleção e compra de novos livros e materiais.", "Bruna da Mota"),
+        Departamento(3, "Catalogação", 
+                     "Cuida da organização, registro e indexação das obras.", "Sara Silveira"),
+        Departamento(4, "Atendimento", 
+                     "Auxilia leitores e gerencia empréstimos e devoluções.", "Antônio das Neves"),
+        Departamento(5, "Tecnologia da Informação", 
+                     "Mantém os sistemas e infraestrutura tecnológica da biblioteca.", "Sr. Samuel Correia")
     ]
 
     try:
@@ -64,8 +69,57 @@ def create_departament() -> None:
     except Exception as e:
         print("❌ Erro ao criar departamentos:", e)
 
-def create_biblioteca() -> None:
-    ...
+def create_library() -> None:
+    bibliotecas = make_library()
+    try:
+        data =[{
+            "nome":l.nome,
+            "email":l.email,
+            "endereco":l.endereco,
+            "telefone":l.telefone,
+        } for l in bibliotecas]
+
+        response = supabase.table("bibliotecas").insert(data).execute()
+        print("✅ Bibliotecas criadas com sucesso!")
+        print(response)
+    except Exception as e:
+        print("❌ Erro ao criar Bibliotecas:", e)
+
+def create_publisher() -> None:
+    publishers = make_publisher()
+    try:
+        data =[{
+            "nome":p.nome,
+            "email":p.email,
+            "endereco":p.endereco,
+            "telefone":p.telefone,
+            "cnpj":p.cnpj
+        } for p in publishers]
+
+        response = supabase.table("editoras").insert(data).execute()
+        print("✅ Editoras criadas com sucesso!")
+        print(response)
+    except Exception as e:
+        print("❌ Erro ao criar Editoras:", e)
+
+def create_books() -> None:
+    books = make_books()
+    try:
+        data =[{
+            "biblioteca_id": b.biblioteca_id,
+            "titulo": b.titulo,
+            "editora_id": b.editora_id,
+            "ano_publicacao": b.ano_pubicacao,
+            "autor": b.autor,
+            "isbn": b.isbn
+        } for b in books]
+
+        response = supabase.table("livros").insert(data).execute()
+        print("✅ Livros criados com sucesso!")
+        print(response)
+    except Exception as e:
+        print("❌ Erro ao criar livros:", e)
+
 
 if __name__ == "__main__":
-    create_departament()
+    ...
