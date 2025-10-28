@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from supabase import create_client, Client
-from src.script.make_data import make_people, make_library, make_publisher
+from src.script.make_data import make_people, make_library, make_publisher, make_books
 from src.models.departamento import Departamento
 
 load_dotenv()
@@ -39,7 +39,7 @@ def add_people(n_rows:int) -> None:
         )
         print(f"✅ Pessoa {p.nome} inserida com sucesso!")
 
-    print("🎉 Inserção concluída com sucesso!")
+    print("✅ Inserção concluída com sucesso!")
 
 def create_departament() -> None:
     departamentos = [
@@ -102,5 +102,24 @@ def create_publisher() -> None:
     except Exception as e:
         print("❌ Erro ao criar Editoras:", e)
 
+def create_books() -> None:
+    books = make_books()
+    try:
+        data =[{
+            "biblioteca_id": b.biblioteca_id,
+            "titulo": b.titulo,
+            "editora_id": b.editora_id,
+            "ano_publicacao": b.ano_pubicacao,
+            "autor": b.autor,
+            "isbn": b.isbn
+        } for b in books]
+
+        response = supabase.table("livros").insert(data).execute()
+        print("✅ Livros criados com sucesso!")
+        print(response)
+    except Exception as e:
+        print("❌ Erro ao criar livros:", e)
+
+
 if __name__ == "__main__":
-    create_publisher()
+    ...

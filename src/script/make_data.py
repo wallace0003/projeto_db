@@ -4,6 +4,7 @@ from random import randint, choice
 from src.models.pessoa import Pessoa
 from src.models.biblioteca import Biblioteca
 from src.models.editora import Editora
+from src.models.livro import Livro
 
 #Instanciando a classe faker
 fake = Faker("pt-br")
@@ -196,11 +197,41 @@ def make_publisher() -> None:
 
     return lista_editora
 
+def make_books() -> None:
+    books = [
+        "As Sombras de Aurora",
+        "O Último Guardião do Tempo",
+        "Entre Estrelas e Tempestades",
+        "A Casa das Vozes Perdidas",
+        "O Jardim dos Relógios Quebrados",
+        "Memórias de Um Mundo Submerso",
+        "A Canção dos Ventos Antigos",
+        "O Herdeiro das Cinzas",
+        "Ecos de Um Futuro Esquecido",
+        "O Segredo do Farol Silencioso"
+    ]
+
+    lista_livros = []
+
+    for b in books:
+        editora_id = randint(1,10)
+        titulo = b
+        biblioteca_id = randint(1,10)
+        ano_publicacao = str(fake.date_between(start_date, end_date))
+        isbn = randint(1111111111111,9999999999999)
+        autor = fake.name()
+        livro = Livro(editora_id=editora_id, titulo=titulo, biblioteca_id=biblioteca_id,
+                      ano_pubicacao=ano_publicacao, isbn=isbn, autor=autor)
+        lista_livros.append(livro)
+    
+    return lista_livros
+
+
 
 if __name__ == "__main__":
     pessoas = make_people(5)
     print("ok")
-    bibliotecas = make_publisher()
-    print(bibliotecas[0].nome)
-    print(bibliotecas[-1].nome)
+    bibliotecas = make_books()
+    print(bibliotecas[0].titulo)
+    print(bibliotecas[-1].titulo)
     
