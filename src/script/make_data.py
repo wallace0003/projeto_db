@@ -80,67 +80,121 @@ biografias = [
     "Historiador e biógrafo que retrata grandes nomes da literatura."
 ]
 
-def make_people(n_peoples: int) -> list:
+def make_people(n_peoples: int = 5, nomes_tipo_pessoas: dict[str, list[str]] | None = None) -> list:
     pessoas = []
-    for i in range(1, n_peoples + 1):
-        estado = choice(list(estados_cidades.keys()))
-        cidade = choice(estados_cidades[estado])
-        bairro = choice(bairros)
-        rua = choice(ruas)
-        cep = choice(ceps)
-        numero = randint(1, 1000)
-        nome = fake.name()
-        cpf = fake.cpf()
-        email = fake.email()
-        tipo = choice(tipos_pessoas)
-        data_cadastro = fake.date_between(start_date, end_date)
-        data_admissao = fake.date_between(start_date, end_date)
-        status = choice(status_conta)
-        data_nascimento = fake.date_of_birth(minimum_age=18, maximum_age=65)
-        nacionalidade = choice(["Brasileiro", "Venezuelano", "Canadense","Americano","Argentino"])
-        endereco = f"{rua}, {numero} - {bairro}, {cidade}/{estado}, CEP {cep}"
 
-        # Campos opcionais
-        cargo = None
-        salario = None
-        biografia = None
-        departamento_id = None
-        biblioteca_id = None
+    # Se o dicionário for passado, gera pessoas com base nele
+    if nomes_tipo_pessoas:
+        for tipo, lista_nomes in nomes_tipo_pessoas.items():
+            for nome in lista_nomes:
+                estado = choice(list(estados_cidades.keys()))
+                cidade = choice(estados_cidades[estado])
+                bairro = choice(bairros)
+                rua = choice(ruas)
+                cep = choice(ceps)
+                numero = randint(1, 1000)
+                cpf = fake.cpf()
+                email = fake.email()
+                data_cadastro = fake.date_between(start_date, end_date)
+                data_admissao = fake.date_between(start_date, end_date)
+                status = choice(status_conta)
+                data_nascimento = fake.date_of_birth(minimum_age=18, maximum_age=65)
+                nacionalidade = choice(["Brasileiro", "Venezuelano", "Canadense", "Americano", "Argentino"])
+                endereco = f"{rua}, {numero} - {bairro}, {cidade}/{estado}, CEP {cep}"
 
-        if tipo == "FUNCIONARIO":
-            cargo = choice(cargos_biblioteca)
-            salario = randint(2000, 10000)
-            departamento_id = randint(1,5)
-        elif tipo == "AUTOR":
-            biografia = choice(biografias)
+                cargo = salario = biografia = departamento_id = biblioteca_id = None
 
-        pessoa = Pessoa(
-            id_pessoa=i,
-            nome=nome,
-            cpf=cpf,
-            cep=cep,
-            estado=estado,
-            cidade=cidade,
-            bairro=bairro,
-            rua=rua,
-            numero=numero,
-            email=email,
-            tipo_pessoa=tipo,
-            data_cadastro=str(data_cadastro),
-            status_conta=status,
-            cargo=cargo,
-            data_admissao=str(data_admissao),
-            salario=salario,
-            departamento_id=departamento_id,
-            biblioteca_id=biblioteca_id,
-            data_nascimento=str(data_nascimento),
-            biografia=biografia,
-            nacionalidade=nacionalidade,
-            endereco=endereco
-        )
+                if tipo.upper() == "FUNCIONARIO":
+                    cargo = choice(cargos_biblioteca)
+                    salario = randint(2000, 10000)
+                    departamento_id = randint(1, 5)
+                    biblioteca_id = randint(1, 10)
+                elif tipo.upper() == "AUTOR":
+                    biografia = choice(biografias)
 
-        pessoas.append(pessoa)
+                pessoa = Pessoa(
+                    nome=nome,
+                    cpf=cpf,
+                    cep=cep,
+                    estado=estado,
+                    cidade=cidade,
+                    bairro=bairro,
+                    rua=rua,
+                    numero=numero,
+                    email=email,
+                    tipo_pessoa=tipo.upper(),
+                    data_cadastro=str(data_cadastro),
+                    status_conta=status,
+                    cargo=cargo,
+                    data_admissao=str(data_admissao),
+                    salario=salario,
+                    departamento_id=departamento_id,
+                    biblioteca_id=biblioteca_id,
+                    data_nascimento=str(data_nascimento),
+                    biografia=biografia,
+                    nacionalidade=nacionalidade,
+                    endereco=endereco
+                )
+
+                pessoas.append(pessoa)
+
+    else:
+        for i in range(1, n_peoples + 1):
+            estado = choice(list(estados_cidades.keys()))
+            cidade = choice(estados_cidades[estado])
+            bairro = choice(bairros)
+            rua = choice(ruas)
+            cep = choice(ceps)
+            numero = randint(1, 1000)
+            nome = fake.name()
+            cpf = fake.cpf()
+            email = fake.email()
+            tipo = choice(tipos_pessoas)
+            data_cadastro = fake.date_between(start_date, end_date)
+            data_admissao = fake.date_between(start_date, end_date)
+            status = choice(status_conta)
+            data_nascimento = fake.date_of_birth(minimum_age=18, maximum_age=65)
+            nacionalidade = choice(["Brasileiro", "Venezuelano", "Canadense", "Americano", "Argentino"])
+            endereco = f"{rua}, {numero} - {bairro}, {cidade}/{estado}, CEP {cep}"
+
+            cargo = salario = biografia = departamento_id = biblioteca_id = None
+
+            if tipo.upper() == "FUNCIONARIO":
+                cargo = choice(cargos_biblioteca)
+                salario = randint(2000, 10000)
+                departamento_id = randint(1, 5)
+                biblioteca_id = randint(1, 10)
+            elif tipo.upper() == "AUTOR":
+                biografia = choice(biografias)
+
+            pessoa = Pessoa(
+                nome=nome,
+                cpf=cpf,
+                cep=cep,
+                estado=estado,
+                cidade=cidade,
+                bairro=bairro,
+                rua=rua,
+                numero=numero,
+                email=email,
+                tipo_pessoa=tipo.upper(),
+                data_cadastro=str(data_cadastro),
+                status_conta=status,
+                cargo=cargo,
+                data_admissao=str(data_admissao),
+                salario=salario,
+                departamento_id=departamento_id,
+                biblioteca_id=biblioteca_id,
+                data_nascimento=str(data_nascimento),
+                biografia=biografia,
+                nacionalidade=nacionalidade,
+                endereco=endereco
+            )
+
+            pessoas.append(pessoa)
+
     return pessoas
+
 
 def make_library() -> list:
     bibliotecas = [

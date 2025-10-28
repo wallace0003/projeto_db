@@ -1,13 +1,12 @@
 
 class Pessoa:
-    def __init__(self, id_pessoa: int, nome:str, cpf: str,
+    def __init__(self, nome:str, cpf: str,
                  cep: str, estado: str, cidade: str, bairro: str, rua: str, numero: int,
                  email: str, tipo_pessoa: str, data_cadastro: str,
                  status_conta: str, cargo: str | None, data_admissao: str, salario: float | None, 
                  departamento_id: int | None, biblioteca_id: int | None, data_nascimento: str, 
                  biografia: str | None,
                  nacionalidade:str, endereco:str):
-        self.id_pessoa = id_pessoa
         self.nome = nome
         self.cpf = cpf
         self.cep = cep
