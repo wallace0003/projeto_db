@@ -1,7 +1,9 @@
 import os
 from dotenv import load_dotenv
 from supabase import create_client, Client
-from src.script.make_data import make_people, make_library, make_publisher, make_books
+from src.script.make_data import make_people, make_library, make_publisher, make_books 
+from src.script.make_data import make_categories
+
 from src.models.departamento import Departamento
 
 load_dotenv()
@@ -11,14 +13,13 @@ key = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
 
 
-def add_people(n_rows:int) -> None:
-    pessoas = make_people(n_rows)
+def add_people(n_rows:int, nomes_tipo_pessoas: dict[str, list[str]] | None = None) -> None:
+    pessoas = make_people(n_rows, nomes_tipo_pessoas)
 
     for p in pessoas:
         response = (
             supabase.table("pessoas")
             .insert({
-                "id_pessoa": p.id_pessoa,
                 "nome": p.nome,
                 "cpf": p.cpf,
                 "email": p.email,
@@ -120,6 +121,20 @@ def create_books() -> None:
     except Exception as e:
         print("❌ Erro ao criar livros:", e)
 
+def create_categories() -> None:
+    id_e_categorias = make_categories()
+    try:
+        data=[{
+            "livro_id": chave,
+            "categoria": valor
+        } for chave, valor in id_e_categorias.items()]
+
+        response = supabase.table("livro_categorias").insert(data).execute()
+        print("✅ categorias criadas com sucesso!")
+        print(response)
+    except Exception as e:
+        print("❌ Erro ao criar categorias:", e)
+
 
 if __name__ == "__main__":
-    ...
+    create_categories()
