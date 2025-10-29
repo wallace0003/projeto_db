@@ -5,6 +5,7 @@ from src.models.pessoa import Pessoa
 from src.models.biblioteca import Biblioteca
 from src.models.editora import Editora
 from src.models.livro import Livro
+from src.models.livro_categorias import Categoria
 
 #Instanciando a classe faker
 fake = Faker("pt-br")
@@ -279,6 +280,23 @@ def make_books() -> None:
         lista_livros.append(livro)
     
     return lista_livros
+
+def make_categories() -> dict[int, str]:
+    livros_categorias = {
+        1: "Fantasia Sombria",
+        2: "Ficção Científica",
+        3: "Romance Espacial",
+        4: "Mistério / Suspense",
+        5: "Drama Psicológico",
+        6: "Ficção Pós-Apocalíptica",
+        7: "Aventura / Mitologia",
+        8: "Fantasia Épica",
+        9: "Ficção Científica Distópica",
+        10: "Suspense / Terror"
+    }
+    return livros_categorias
+
+
 
 
 
