@@ -1,11 +1,12 @@
 from faker import Faker
-from datetime import datetime
+from datetime import datetime, timedelta
 from random import randint, choice
 from src.models.pessoa import Pessoa
 from src.models.biblioteca import Biblioteca
 from src.models.editora import Editora
 from src.models.livro import Livro
 from src.models.livro_autor import LivroAutor
+from src.models.emprestimo import Emprestimo
 import os
 from dotenv import load_dotenv
 from supabase import create_client, Client
@@ -323,14 +324,57 @@ def make_book_author() -> list[LivroAutor]:
     
     return lista_livro_autor
 
+def make_loan(n_loan:int) -> list[Emprestimo]:
+    data_usuarios = (
+        supabase.table("pessoas")
+        .select("id_pessoa")
+        .eq("tipo_pessoa", "USUARIO")
+        .execute()
+        )
+
+    data_funcionarios = (
+        supabase.table("pessoas")
+        .select("id_pessoa")
+        .eq("tipo_pessoa", "FUNCIONARIO")
+        .execute()
+    )
+
+    lista_emprestimo = []
+    
+    for _ in range(n_loan):
+        data_emprestimo = fake.date_between(start_date, end_date)
+        data_prevista_devolucao = data_emprestimo + timedelta(10)
+        random_data_devolucao = data_emprestimo + timedelta(randint(3, 15))
+        data_devolucao = choice([random_data_devolucao, None])
 
 
+        if (data_devolucao is not None and data_devolucao > data_prevista_devolucao):
+            status = "EM_ATRASO"
+        elif(data_devolucao is None):
+            status = "ATIVO"
+        elif(data_devolucao is not None and data_devolucao <= data_prevista_devolucao):
+            status = "CONCLUIDO"
+
+        if(data_devolucao is not None):
+            data_devolucao = str(data_devolucao)
+        
+        
+        
+        usuario_id = choice([item["id_pessoa"] for item in data_usuarios.data])
+        funcionario_id = choice([item["id_pessoa"] for item in data_funcionarios.data])
+        livro_id = choice([i for i in range(1,11)])
+        emprestimo = Emprestimo(
+            data_emprestimo=data_emprestimo,data_prevista_devolucao=data_prevista_devolucao,
+            data_devolucao=data_devolucao, funcionario_id=funcionario_id, status=status,
+            usuario_id=usuario_id, livro_id=livro_id
+            )
+        lista_emprestimo.append(emprestimo)
+
+    return lista_emprestimo
 
 
 
 
 if __name__ == "__main__":
-    dados = make_book_author()
-    print(dados[0].livro_id)
-    print(dados[-1].livro_id)
+    ...
     

@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from supabase import create_client, Client
 from src.script.make_data import make_people, make_library, make_publisher, make_books 
-from src.script.make_data import make_categories, make_book_author
+from src.script.make_data import make_categories, make_book_author, make_loan
 
 from src.models.departamento import Departamento
 
@@ -149,6 +149,25 @@ def create_book_author() -> None:
     except Exception as e:
         print("❌ Erro ao inserir livros e autores:", e)
 
+def create_loan() -> None:
+    emprestimos = make_loan(300)
+    try:
+        data=[{
+            "data_emprestimo": str(emprestimo.data_emprestimo),
+            "data_prevista_devolucao": str(emprestimo.data_prevista_devolucao),
+            "data_devolucao": emprestimo.data_devolucao,
+            "status": emprestimo.status,
+            "usuario_id": emprestimo.usuario_id,
+            "funcionario_id": emprestimo.funcionario_id,
+            "livro_id": emprestimo.livro_id
+        } for emprestimo in emprestimos]
+
+        response = supabase.table("emprestimos").insert(data).execute()
+        print("✅ Emprestimos inseridos com sucesso!")
+        print(response)
+    except Exception as e:
+        print("❌ Erro ao inserir emprestimos", e)
+
 
 if __name__ == "__main__":
-    create_book_author()
+    create_loan()
