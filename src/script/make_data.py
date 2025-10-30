@@ -1,11 +1,20 @@
 from faker import Faker
-from datetime import datetime
+from datetime import datetime, timedelta
 from random import randint, choice
 from src.models.pessoa import Pessoa
 from src.models.biblioteca import Biblioteca
 from src.models.editora import Editora
 from src.models.livro import Livro
-from src.models.livro_categorias import Categoria
+from src.models.livro_autor import LivroAutor
+from src.models.emprestimo import Emprestimo
+import os
+from dotenv import load_dotenv
+from supabase import create_client, Client
+load_dotenv()
+
+url = os.getenv("SUPABASE_URL")
+key = os.getenv("SUPABASE_KEY")
+supabase: Client = create_client(url, key)
 
 #Instanciando a classe faker
 fake = Faker("pt-br")
@@ -296,14 +305,76 @@ def make_categories() -> dict[int, str]:
     }
     return livros_categorias
 
+def make_book_author() -> list[LivroAutor]:
+    response = (
+        supabase.table("pessoas")
+        .select("id_pessoa")
+        .eq("tipo_pessoa", "AUTOR")
+        .execute()
+    )
+    id_autores = [item["id_pessoa"] for item in response.data]
+    # print(id_autores)
+    lista_livro_autor = []
+    for c in range(1,11):
+        livro_id = c
+        autor_id = choice(id_autores)
+        livro_autor = LivroAutor(livro_id=livro_id, autor_id=autor_id)
+        lista_livro_autor.append(livro_autor)
+        id_autores.remove(autor_id)
+    
+    return lista_livro_autor
+
+def make_loan(n_loan:int) -> list[Emprestimo]:
+    data_usuarios = (
+        supabase.table("pessoas")
+        .select("id_pessoa")
+        .eq("tipo_pessoa", "USUARIO")
+        .execute()
+        )
+
+    data_funcionarios = (
+        supabase.table("pessoas")
+        .select("id_pessoa")
+        .eq("tipo_pessoa", "FUNCIONARIO")
+        .execute()
+    )
+
+    lista_emprestimo = []
+    
+    for _ in range(n_loan):
+        data_emprestimo = fake.date_between(start_date, end_date)
+        data_prevista_devolucao = data_emprestimo + timedelta(10)
+        random_data_devolucao = data_emprestimo + timedelta(randint(3, 15))
+        data_devolucao = choice([random_data_devolucao, None])
+
+
+        if (data_devolucao is not None and data_devolucao > data_prevista_devolucao):
+            status = "EM_ATRASO"
+        elif(data_devolucao is None):
+            status = "ATIVO"
+        elif(data_devolucao is not None and data_devolucao <= data_prevista_devolucao):
+            status = "CONCLUIDO"
+
+        if(data_devolucao is not None):
+            data_devolucao = str(data_devolucao)
+        
+        
+        
+        usuario_id = choice([item["id_pessoa"] for item in data_usuarios.data])
+        funcionario_id = choice([item["id_pessoa"] for item in data_funcionarios.data])
+        livro_id = choice([i for i in range(1,11)])
+        emprestimo = Emprestimo(
+            data_emprestimo=data_emprestimo,data_prevista_devolucao=data_prevista_devolucao,
+            data_devolucao=data_devolucao, funcionario_id=funcionario_id, status=status,
+            usuario_id=usuario_id, livro_id=livro_id
+            )
+        lista_emprestimo.append(emprestimo)
+
+    return lista_emprestimo
 
 
 
 
 if __name__ == "__main__":
-    pessoas = make_people(5)
-    print("ok")
-    bibliotecas = make_books()
-    print(bibliotecas[0].titulo)
-    print(bibliotecas[-1].titulo)
+    ...
     
