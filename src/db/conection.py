@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from supabase import create_client, Client
 from src.script.make_data import make_people, make_library, make_publisher, make_books 
-from src.script.make_data import make_categories
+from src.script.make_data import make_categories, make_book_author
 
 from src.models.departamento import Departamento
 
@@ -135,6 +135,20 @@ def create_categories() -> None:
     except Exception as e:
         print("❌ Erro ao criar categorias:", e)
 
+def create_book_author() -> None:
+    livros_autores = make_book_author()
+    try:
+        data=[{
+            "livro_id": livro_autor.livro_id,
+            "autor_id": livro_autor.autor_id
+        } for livro_autor in livros_autores]
+
+        response = supabase.table("livro_autor").insert(data).execute()
+        print("✅ livro e autores inseridos com sucesso!")
+        print(response)
+    except Exception as e:
+        print("❌ Erro ao inserir livros e autores:", e)
+
 
 if __name__ == "__main__":
-    create_categories()
+    create_book_author()

@@ -5,7 +5,15 @@ from src.models.pessoa import Pessoa
 from src.models.biblioteca import Biblioteca
 from src.models.editora import Editora
 from src.models.livro import Livro
-from src.models.livro_categorias import Categoria
+from src.models.livro_autor import LivroAutor
+import os
+from dotenv import load_dotenv
+from supabase import create_client, Client
+load_dotenv()
+
+url = os.getenv("SUPABASE_URL")
+key = os.getenv("SUPABASE_KEY")
+supabase: Client = create_client(url, key)
 
 #Instanciando a classe faker
 fake = Faker("pt-br")
@@ -296,14 +304,33 @@ def make_categories() -> dict[int, str]:
     }
     return livros_categorias
 
+def make_book_author() -> list[LivroAutor]:
+    response = (
+        supabase.table("pessoas")
+        .select("id_pessoa")
+        .eq("tipo_pessoa", "AUTOR")
+        .execute()
+    )
+    id_autores = [item["id_pessoa"] for item in response.data]
+    # print(id_autores)
+    lista_livro_autor = []
+    for c in range(1,11):
+        livro_id = c
+        autor_id = choice(id_autores)
+        livro_autor = LivroAutor(livro_id=livro_id, autor_id=autor_id)
+        lista_livro_autor.append(livro_autor)
+        id_autores.remove(autor_id)
+    
+    return lista_livro_autor
+
+
+
 
 
 
 
 if __name__ == "__main__":
-    pessoas = make_people(5)
-    print("ok")
-    bibliotecas = make_books()
-    print(bibliotecas[0].titulo)
-    print(bibliotecas[-1].titulo)
+    dados = make_book_author()
+    print(dados[0].livro_id)
+    print(dados[-1].livro_id)
     
