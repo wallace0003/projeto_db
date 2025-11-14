@@ -3,8 +3,9 @@ from dotenv import load_dotenv
 from supabase import create_client, Client
 from src.script.make_data import make_people, make_library, make_publisher, make_books 
 from src.script.make_data import make_categories, make_book_author, make_loan
-
 from src.models.departamento import Departamento
+
+#para rodar o codigo utiliza o comando: "python3 -m src.sql.conection_insertion"
 
 load_dotenv()
 

@@ -12,6 +12,8 @@ from dotenv import load_dotenv
 from supabase import create_client, Client
 load_dotenv()
 
+#Para rodar o código utilize o comando: python3 -m src.script.make_data
+
 url = os.getenv("SUPABASE_URL")
 key = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
